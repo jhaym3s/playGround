@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:playground/users.dart';
+import 'package:flutter/widgets.dart';
+import 'package:playground/slideItem.dart';
+import 'package:playground/slide.dart';
+import 'dart:async';
 
 void main() {
   runApp(MyApp());
@@ -23,114 +26,65 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  int currentPage = 0 ;
+  final PageController controlsPage = PageController(
+    initialPage: 0,
+  );
+  @override
+  void initState() {
+    super.initState();
+    Timer.periodic(Duration(seconds: 6), (Timer timer) {
+      if(currentPage < 2){
+        currentPage = currentPage+1;
+      }else {currentPage = 0 ;}
+     controlsPage.animateToPage(currentPage, duration: Duration(milliseconds: 300), curve: Curves.easeIn);
+      //note that the duration here is the animation duration so it is not same as the one used in the timer
+      //and the curve property is for the animation effect
+    });
+
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controlsPage.dispose();
+  }
+     _onChanged(int index){
+    setState(() {
+      currentPage = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                showSearch(context: context, delegate: SearchData());
-              },
-            )
-          ],
-        ),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Card(
-                shadowColor: Colors.blueGrey,
-                elevation: 120,
-                child: Container(
-                    width: 380,
-                    height: 160,
-                    color: Colors.blue,
-                    child: Column(
-                      //mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CircleAvatar(
-                            backgroundColor: Colors.green,
-                            radius: 25,
-                          ),
-                        ),
-                        Text("this is the text"),
-                        Text("this is the sport for email"),
-                        Text("this is the the twitter spot")
-                      ],
-                    )),
+      body: Center(
+        child: Container(
+          child: Column(
+            children: [
+              Expanded(
+                child:PageView.builder(itemBuilder: (context, index) {
+                  return SlideItem(index);
+                },
+                  scrollDirection: Axis.horizontal,
+                 controller: controlsPage,
+                  onPageChanged: _onChanged,
+                itemCount: slideList.length,
+                ),
               ),
-            ),
-            Container(
-              height: 200,
-              width: 200,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
+              Column(
                 children: [
-                  Container(child: Text("this is the part")),
-                  Container(child: Text("this is the part")),
-                  Container(child: Text("this is the part")),
-                  Container(child: Text("this is the part")),
+                  FlatButton(
+                    onPressed: () {},
+                    child: Text("Getting Started"),
+                    color: Colors.blue,
+                  ),
                 ],
-              ),
-            )
-          ],
-        ));
-  }
-}
-
-class SearchData extends SearchDelegate<Users> {
-  List<Users> listOfUsers = [
-    Users("Jhaymes", "Mobile developer"),
-    Users("Jhaymes", "BackEnd developer"),
-    Users("Jhaymes", "FrontEnd developer"),
-    Users("Jhaymes", "FullStalk developer"),
-    Users("Jhaymes", " Designer"),
-    Users("Jhaymes", "Git professional"),
-    Users("Jhaymes", "Something else"),
-  ];
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return [
-      IconButton(
-          icon: Icon(Icons.clear),
-          onPressed: () {
-            query = "";
-          })
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {
-          close(context, null);
-        });
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return GridView(gridDelegate: null);
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    final suggestion = listOfUsers;
-    return ListView.builder(
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: Icon(Icons.computer),
-          title: Text(suggestion[index].name),
-          onTap: () {},
-          subtitle: Text(suggestion[index].title),
-        );
-      },
-      itemCount: suggestion.length,
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
