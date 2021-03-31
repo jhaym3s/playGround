@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:playground/slidingPage/main_slider_file.dart';
+import 'package:playground/transform/scale_drawer.dart';
+import 'package:playground/transform/guitar_drawer.dart';
 import 'package:playground/transform/transform_file.dart';
 
 void main() {
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: TransformFile(),
+      home: CustomGuitarDrawer(),
     );
   }
 }

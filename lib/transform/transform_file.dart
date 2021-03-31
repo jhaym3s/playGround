@@ -20,6 +20,7 @@ class _TransformFileState extends State<TransformFile> {
       max: 100,
     );
   }
+
   Widget rotate(){
     return Container(
       child: Transform.rotate(
@@ -110,6 +111,7 @@ class _TransformFileState extends State<TransformFile> {
             skew(),
             SizedBox(height: 10),
             threeD(),
+
           ],
         ),
       )
