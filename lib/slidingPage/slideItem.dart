@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/jhaym/AndroidStudioProjects/playGround/lib/slidingPage/slide.dart';
+//import '../playGround/lib/slidingPage/slide.dart';
+import 'package:playground/slidingPage/slide.dart';
 
 class SlideItem extends StatelessWidget {
   final int index;
